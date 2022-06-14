@@ -21,7 +21,7 @@ let modalBtn = document.querySelector(".modal-content .close-btn");
 let modalH1 = document.querySelector(".modal-h1");
 let word = getRandomWord();
 console.log(word);
-let word_list = [word1, word2, word3, word4, word5];
+let word_list = [word1, word2, word3, word4, word5, word6];
 let word_list_index = 0;
 
 // GET WORD to guess
@@ -157,10 +157,16 @@ function enterKey() {
         word_list[word_list_index][i].classList.add("grey-tile");
       }
       else if (arrayWrongLetters[i] === 1) {
+        let letter = word_list[word_list_index][i].textContent.toLowerCase();
         word_list[word_list_index][i].classList.add("blue-tile");
+        let l = document.querySelector(`.${letter}`);
+        l.classList.add("blue-tile");
       }
       else {
         word_list[word_list_index][i].classList.add("orange-tile");
+        let letter = word_list[word_list_index][i].textContent.toLowerCase();
+        let l = document.querySelector(`.${letter}`);
+        l.classList.add("orange-tile");
       }
     }
     word_list_index++;
