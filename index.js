@@ -2,6 +2,15 @@ import CheckWord from "./check-word.js";
 import { words } from "./word-list.js";
 
 let body = document.documentElement;
+// MODAL VARIABLES
+let modal = document.querySelector(".modal");
+let modalBtn = document.querySelector(".modal-content .close-btn");
+let modalH1 = document.querySelector(".modal-h1");
+let info = document.querySelector(".info");
+let modalInfo = document.querySelector(".modal-how-to-play");
+let modalInfoBtn = document.querySelector(".modal-how-to-play .close-btn");
+
+// OTHER VARIABLES
 let tile1 = document.querySelector(".tile1");
 let tile2 = document.querySelector(".tile2");
 let tile3 = document.querySelector(".tile3");
@@ -16,9 +25,6 @@ let word5 = document.querySelectorAll(".word5");
 let word6 = document.querySelectorAll(".word6");
 let enter = document.querySelector(".enter");
 let returnKey = document.querySelector(".return");
-let modal = document.querySelector(".modal");
-let modalBtn = document.querySelector(".modal-content .close-btn");
-let modalH1 = document.querySelector(".modal-h1");
 let word = getRandomWord();
 console.log(word);
 let word_list = [word1, word2, word3, word4, word5, word6];
@@ -174,6 +180,17 @@ function enterKey() {
 }
 
 // MODAL ClOSE EVENT
+// close win / not in dictionary modal button
 modalBtn.addEventListener("click", () => {
   modal.classList.remove("modal-show");
+});
+
+// close how to play modal button
+modalInfoBtn.addEventListener("click", () => {
+  modalInfo.classList.remove("modal-show");
+});
+
+// open modal on ? how to play
+info.addEventListener("click", () => {
+  modalInfo.classList.add("modal-show");
 });
