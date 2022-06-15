@@ -176,6 +176,10 @@ function enterKey() {
       }
     }
     word_list_index++;
+    if (word_list_index > 5) {
+          modalH1.textContent = word;
+          modal.classList.add("modal-show");
+    }
   }
 }
 
