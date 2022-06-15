@@ -196,6 +196,7 @@ body{
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: white;
+  color: #2d2d2d;
   padding: 1rem 1.5rem;
   width: 24rem;
   border-radius: 0.5rem;
@@ -272,4 +273,41 @@ body{
   width: 3rem;
   border: 1px solid grey;
   font-size: 2rem;
+}
+
+.modal-michael{
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(1.1);
+  transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+}
+
+.modal-michael-content{
+  position: absolute;
+  top: 15%;
+  left: 82%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  color: #2d2d2d;
+  padding: 1rem 1.5rem;
+  width: 25rem;
+  border-radius: 0.5rem;
+  text-align: left;
+}
+
+.seutin{
+  color: darkred;
+}
+
+.show {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+  transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
 }

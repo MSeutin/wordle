@@ -9,6 +9,9 @@ let modalH1 = document.querySelector(".modal-h1");
 let info = document.querySelector(".info");
 let modalInfo = document.querySelector(".modal-how-to-play");
 let modalInfoBtn = document.querySelector(".modal-how-to-play .close-btn");
+let modalMS = document.querySelector(".initials");
+let modalMichael = document.querySelector(".modal-michael");
+let modalMichaelBtn = document.querySelector(".modal-michael-content .close-btn");
 
 // OTHER VARIABLES
 let tile1 = document.querySelector(".tile1");
@@ -197,4 +200,13 @@ modalInfoBtn.addEventListener("click", () => {
 // open modal on ? how to play
 info.addEventListener("click", () => {
   modalInfo.classList.add("modal-show");
+});
+
+// Michael Modals
+modalMS.addEventListener("click", () => {
+  modalMichael.classList.add("show");
+});
+
+modalMichaelBtn.addEventListener("click", () => {
+  modalMichael.classList.remove("show");
 });

@@ -1,0 +1,5 @@
+. refactor for cleaner code
+. why is my modal-show not working on MS event
+. prevent non alpha keys from writing in tiles
+. shooting stars effect
+. maybe add a stats modal
