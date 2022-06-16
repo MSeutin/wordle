@@ -152,18 +152,36 @@ function enterKey() {
     !arrayWrongLetters.includes(1) &&
     !arrayRightLetters.includes(1)
   ) {
-    word_list[word_list_index][0].classList.add("grey-tile");
-    word_list[word_list_index][1].classList.add("grey-tile");
-    word_list[word_list_index][2].classList.add("grey-tile");
-    word_list[word_list_index][3].classList.add("grey-tile");
-    word_list[word_list_index][4].classList.add("grey-tile");
+    let l1 = word_list[word_list_index][0];
+    let l2 = word_list[word_list_index][1];
+    let l3 = word_list[word_list_index][2];  
+    let l4 = word_list[word_list_index][3];  
+    let l5 = word_list[word_list_index][4];  
+    l1.classList.add("wrong-letter");
+    l2.classList.add("wrong-letter");
+    l3.classList.add("wrong-letter");
+    l4.classList.add("wrong-letter");
+    l5.classList.add("wrong-letter");
+    let letter1 = l1.textContent.toLowerCase();
+    let letter2 = l2.textContent.toLowerCase();
+    let letter3 = l3.textContent.toLowerCase();
+    let letter4 = l4.textContent.toLowerCase();
+    let letter5 = l5.textContent.toLowerCase();
+    document.querySelector(`.${letter1}`).classList.add("wrong-letter");
+    document.querySelector(`.${letter2}`).classList.add("wrong-letter");
+    document.querySelector(`.${letter3}`).classList.add("wrong-letter");
+    document.querySelector(`.${letter4}`).classList.add("wrong-letter");
+    document.querySelector(`.${letter5}`).classList.add("wrong-letter");
     word_list_index++;
   }
   else {
     // WORD IN DICTIONARY and some LETTER FOUND
     for (let i = 0; i < word_list[word_list_index].length; i++){
       if (arrayWrongLetters[i] != 1 && arrayRightLetters[i] != 1) {
-        word_list[word_list_index][i].classList.add("grey-tile");
+        word_list[word_list_index][i].classList.add("wrong-letter");
+        let l1 = word_list[word_list_index][i].textContent.toLowerCase();
+        document.querySelector(`.${l1}`).classList.add("wrong-letter");
+
       }
       else if (arrayWrongLetters[i] === 1) {
         let letter = word_list[word_list_index][i].textContent.toLowerCase();

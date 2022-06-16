@@ -101,7 +101,7 @@ body{
   align-items: center;
   width: 45px;
   height: 55px;
-  background-color: lightgray;
+  background-color: snow;
   border-radius: 5px;
 }
 
@@ -224,6 +224,12 @@ body{
   transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
 }
 
+/* COLOR TILES  */
+.wrong-letter{
+  background-color: darkgrey;
+  color: white;
+}
+
 .grey-tile {
   background-color: lightgray;
   color: white;
@@ -261,7 +267,7 @@ body{
 }
 
 .vague .u {
-  background-color: lightgray;
+  background-color: darkgrey;
   color: white;
 }
 
