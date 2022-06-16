@@ -157,11 +157,11 @@ function enterKey() {
     let l3 = word_list[word_list_index][2];  
     let l4 = word_list[word_list_index][3];  
     let l5 = word_list[word_list_index][4];  
-    l1.classList.add("wrong-letter");
-    l2.classList.add("wrong-letter");
-    l3.classList.add("wrong-letter");
-    l4.classList.add("wrong-letter");
-    l5.classList.add("wrong-letter");
+    l1.classList.add("wrong-letter", "spin");
+    l2.classList.add("wrong-letter", "spin");
+    l3.classList.add("wrong-letter", "spin");
+    l4.classList.add("wrong-letter", "spin");
+    l5.classList.add("wrong-letter", "spin");
     let letter1 = l1.textContent.toLowerCase();
     let letter2 = l2.textContent.toLowerCase();
     let letter3 = l3.textContent.toLowerCase();
@@ -178,19 +178,19 @@ function enterKey() {
     // WORD IN DICTIONARY and some LETTER FOUND
     for (let i = 0; i < word_list[word_list_index].length; i++){
       if (arrayWrongLetters[i] != 1 && arrayRightLetters[i] != 1) {
-        word_list[word_list_index][i].classList.add("wrong-letter");
+        word_list[word_list_index][i].classList.add("wrong-letter", "spin");
         let l1 = word_list[word_list_index][i].textContent.toLowerCase();
         document.querySelector(`.${l1}`).classList.add("wrong-letter");
 
       }
       else if (arrayWrongLetters[i] === 1) {
         let letter = word_list[word_list_index][i].textContent.toLowerCase();
-        word_list[word_list_index][i].classList.add("blue-tile");
+        word_list[word_list_index][i].classList.add("blue-tile", "spin");
         let l = document.querySelector(`.${letter}`);
         l.classList.add("blue-tile");
       }
       else {
-        word_list[word_list_index][i].classList.add("orange-tile");
+        word_list[word_list_index][i].classList.add("orange-tile", "spin");
         let letter = word_list[word_list_index][i].textContent.toLowerCase();
         let l = document.querySelector(`.${letter}`);
         l.classList.add("orange-tile");
