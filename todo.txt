@@ -1,5 +1,4 @@
 . refactor for cleaner code
-. why is my modal-show not working on MS event
-. prevent non alpha keys from writing in tiles
+. why is my modal-show not working on MS event but show does & both are the same.
 . shooting stars effect
 . maybe add a stats modal

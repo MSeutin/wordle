@@ -1,7 +1,6 @@
 import CheckWord from "./check-word.js";
 import { words } from "./word-list.js";
 
-let body = document.documentElement;
 // MODAL VARIABLES
 let modal = document.querySelector(".modal");
 let modalBtn = document.querySelector(".modal-content .close-btn");
@@ -14,6 +13,7 @@ let modalMichael = document.querySelector(".modal-michael");
 let modalMichaelBtn = document.querySelector(".modal-michael-content .close-btn");
 
 // OTHER VARIABLES
+let body = document.documentElement;
 let tile1 = document.querySelector(".tile1");
 let tile2 = document.querySelector(".tile2");
 let tile3 = document.querySelector(".tile3");
@@ -48,11 +48,7 @@ function type(event) {
   letter = letter.toUpperCase();
   for (let i = 0; i < word1.length; i++) {
     if (word_list[word_list_index][i].textContent === "") {
-      if (
-        event.key !== "Enter" &&
-        event.key !== "Backspace" &&
-        event.key !== "Shift"
-      ) {
+      if (event.which >= 65 && event.which <= 90) {
         word_list[word_list_index][i].textContent = letter;
         break;
       }
