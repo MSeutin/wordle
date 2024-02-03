@@ -1,0 +1,1 @@
+// Handles the game's logic, such as determining if a guess is correct, updating the game state based on the guess, and any other logic related to game progression.
