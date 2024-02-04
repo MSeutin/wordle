@@ -1,5 +1,6 @@
 import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
 import KeyRow from "./KeyRow";
+import { useState } from "react";
 
 function Keyboard() {
     const keyRowTop = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"];

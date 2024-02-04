@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 
-function Tile({ guess}) {
+function Tile({ keyPressed}) {
   return (
     <Grid item>
       <Box
@@ -24,7 +24,7 @@ function Tile({ guess}) {
           }}
           elevation={3}>
           <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-            {guess}
+            {keyPressed}
           </Typography>
         </Paper>
       </Box>
