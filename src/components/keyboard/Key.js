@@ -4,8 +4,11 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import BackspaceIcon from "@mui/icons-material/Backspace";
 import Button from "@mui/material/Button";
+import { useContext } from "react";
+import { AppContext } from "../../App";
 
 function Key({ letter }) {
+  const { handleVirtualKeyPress } = useContext(AppContext);
   let width = letter === "ENTER" || letter === "Del" ? 65 : 43;
   const fontSize = letter === "ENTER" ? "subtitle2" : "h6";
   const letterKey = letter === "Del" ? <BackspaceIcon /> : letter;
@@ -38,6 +41,7 @@ function Key({ letter }) {
               justifyContent: "center",
               alignItems: "center",
             }}
+            onClick={() => handleVirtualKeyPress(letter)}
           >
             <Typography variant={fontSize} sx={{ fontWeight: "bold" }}>
               {letterKey}

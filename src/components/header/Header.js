@@ -8,7 +8,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 
 function Header() {
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ width: "100vw", height: 66 }}>
       <AppBar position="static" sx={{ backgroundColor: "#fff", color: "#000" }}>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <IconButton

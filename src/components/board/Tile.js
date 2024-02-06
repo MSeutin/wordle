@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 
-function Tile({ keyPressed}) {
+function Tile({ boardLetter}) {
   return (
     <Grid item>
       <Box
@@ -24,7 +24,7 @@ function Tile({ keyPressed}) {
           }}
           elevation={3}>
           <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-            {keyPressed}
+            {boardLetter}
           </Typography>
         </Paper>
       </Box>

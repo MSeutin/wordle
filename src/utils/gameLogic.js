@@ -1,1 +1,17 @@
-// Handles the game's logic, such as determining if a guess is correct, updating the game state based on the guess, and any other logic related to game progression.
+// game logic
+import fiveLetterWords from "../data/fiveLetterWords";
+
+export function getRandomWord() {
+  return fiveLetterWords[Math.floor(Math.random() * fiveLetterWords.length)];
+}
+
+export function createBoard() {
+  let board = Array.from({ length: 6 }, () =>
+    Array.from({ length: 5 }, () => ({
+      letter: "",
+      active: false,
+      backgroundColor: "white",
+    }))
+  );
+  return board;
+}

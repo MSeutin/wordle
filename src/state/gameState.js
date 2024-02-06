@@ -2,9 +2,5 @@
 
 import React, { useState, useEffect } from 'react';
 import { useGameState } from './useGameState';
-import wordList from '../data/data';
 
-export function getRandomWord() {
-  return wordList[Math.floor(Math.random() * wordList.length)];
-}
 

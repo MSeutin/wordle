@@ -1,1 +1,0 @@
-// Contains functions to validate the user's input against the game's rules and the word list.
