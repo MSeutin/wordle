@@ -15,3 +15,7 @@ export function createBoard() {
   );
   return board;
 }
+
+
+// questions
+// asynchronus states give issues somrtimes, so update w temp variable ok ?
