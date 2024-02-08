@@ -19,21 +19,17 @@ function App() {
   const [wordFound, setWordFound] = useState(false);
   const [message, setMessage] = useState("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [wordChosen, setWordChosen] = useState("house");
 
+  useEffect(() => {
+    if (openSnackbar) {
+      const timer = setTimeout(() => {
+        setOpenSnackbar(false); // Close the Snackbar
+      }, 2000); // Adjust duration if needed
 
-    useEffect(() => {
-      if (openSnackbar) {
-        const timer = setTimeout(() => {
-          setOpenSnackbar(false); // Close the Snackbar
-        }, 2000); // Adjust duration if needed
-
-        return () => clearTimeout(timer);
-      }
-    }, [openSnackbar]);
-  // Get a random word for the game
-  const wordOfTheDay = getRandomWord();
-
-  const [word, setWord] = useState(wordOfTheDay);
+      return () => clearTimeout(timer);
+    }
+  }, [openSnackbar]);
 
   // helper functions
   const isInWordList = (word) => {
@@ -73,7 +69,7 @@ function App() {
     setColumnIndex(currentCol); // Move to the previous column
   };
 
-// HANDLE ENTER
+  // HANDLE ENTER
   const handleEnter = () => {
     let word = getCurrentWord();
     if (word.length < 5) {
@@ -86,12 +82,12 @@ function App() {
       setOpenSnackbar(true);
       return;
     }
-    if (word === wordOfTheDay) {
+    if (word === wordChosen) {
       setWordFound(true);
     } else {
-      // process the word
-      // assign grey, yellow and green letters
-      // lock the row and move to the next row
+      let parsedRow = [...currentRow];
+      parsedRow = parseWord(word, wordChosen, parsedRow);
+      setCurrentRow(parsedRow);
       let newRowIndex = rowIndex + 1;
       setRowIndex(newRowIndex);
       setColumnIndex(0);
@@ -134,3 +130,17 @@ function App() {
 }
 
 export default App;
+
+// function to parse word after pressing enter
+function parseWord(word, wordChosen, parsedRow) {
+  for (let i = 0; i < word.length; i++) {
+    if (word[i] === wordChosen[i]) {
+      parsedRow[i].backgroundColor = "green";
+    } else if (wordChosen.includes(word[i])) {
+      parsedRow[i].backgroundColor = "yellow";
+    } else {
+      parsedRow[i].backgroundColor = "grey";
+    }
+  }
+  return parsedRow;
+}

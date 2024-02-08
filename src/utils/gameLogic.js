@@ -9,7 +9,6 @@ export function createBoard() {
   let board = Array.from({ length: 6 }, () =>
     Array.from({ length: 5 }, () => ({
       letter: "",
-      active: false,
       backgroundColor: "white",
     }))
   );

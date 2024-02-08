@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { AppContext } from "../../App";
 
 function TileBoard() {
-    const { board } = useContext(AppContext);
+  const { board } = useContext(AppContext);
   return (
       <Grid container justifyContent="center" alignItems="center" gap={1}>
       {board.map((row, index) => (

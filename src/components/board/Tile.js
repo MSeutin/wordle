@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 
-function Tile({ boardLetter}) {
+function Tile({ letter, backgroundColor }) {
   return (
     <Grid item>
       <Box
@@ -15,16 +15,19 @@ function Tile({ boardLetter}) {
           height: 52,
         }}
       >
-        <Paper           sx={{
+        <Paper
+          sx={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             width: 52, // Match the size of the Box
             height: 52,
+            bgcolor: backgroundColor,
           }}
-          elevation={3}>
+          elevation={3}
+        >
           <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-            {boardLetter}
+            {letter}
           </Typography>
         </Paper>
       </Box>
