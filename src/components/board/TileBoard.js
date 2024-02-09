@@ -6,7 +6,13 @@ import { AppContext } from "../../App";
 function TileBoard() {
   const { board } = useContext(AppContext);
   return (
-      <Grid container justifyContent="center" alignItems="center" gap={1}>
+    <Grid
+      container
+      justifyContent="center"
+      alignItems="center"
+      gap={1}
+      sx={{ marginTop: "-20px" }}
+    >
       {board.map((row, index) => (
         <TileRow key={index} row={row} />
       ))}

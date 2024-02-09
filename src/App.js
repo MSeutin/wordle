@@ -4,7 +4,7 @@ import TileBoard from "./components/board/TileBoard";
 import Keyboard from "./components/keyboard/Keyboard";
 import MessageCenter from "./components/shared/MessageCenter";
 import Box from "@mui/material/Box";
-import { useState, useEffect, createContext } from "react";
+import { useState, createContext } from "react";
 import { createBoard } from "./utils/gameLogic";
 import { getRandomWord } from "./utils/gameLogic";
 import fiveLetterWords from "./data/fiveLetterWords";
@@ -18,18 +18,8 @@ function App() {
   const [currentRow, setCurrentRow] = useState(board[0]);
   const [wordFound, setWordFound] = useState(false);
   const [message, setMessage] = useState("");
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [wordChosen, setWordChosen] = useState("house");
-
-  useEffect(() => {
-    if (openSnackbar) {
-      const timer = setTimeout(() => {
-        setOpenSnackbar(false); // Close the Snackbar
-      }, 2000); // Adjust duration if needed
-
-      return () => clearTimeout(timer);
-    }
-  }, [openSnackbar]);
+  const [wordChosen, setWordChosen] = useState(getRandomWord());
+  console.log(wordChosen);
 
   // helper functions
   const isInWordList = (word) => {
@@ -45,6 +35,10 @@ function App() {
 
   // *** VIRTUAL KEYBOARD HANDLERS ***
   const handleVirtualKeyPress = (key) => {
+    if (wordFound) {
+      setMessage("You found the word!");
+      return;
+    }
     switch (key) {
       case "Del":
         handleDelete();
@@ -74,15 +68,17 @@ function App() {
     let word = getCurrentWord();
     if (word.length < 5) {
       setMessage("Not enough letters");
-      setOpenSnackbar(true);
       return;
     }
     if (!isInWordList(word)) {
       setMessage("Not in word list");
-      setOpenSnackbar(true);
       return;
     }
     if (word === wordChosen) {
+      let parsedRow = [...currentRow];
+      parsedRow = parseWord(word, wordChosen, parsedRow);
+      setCurrentRow(parsedRow);
+      setMessage("You found the word!");
       setWordFound(true);
     } else {
       let parsedRow = [...currentRow];
@@ -97,14 +93,29 @@ function App() {
 
   // HANDLE LETTER INPUT
   const handleLetterInput = (key) => {
+    if (currentRow.filter((tile) => tile.letter !== "").length >= 5) {
+      return;
+    }
     let updateRow = [...currentRow];
-    updateRow[columnIndex] = { ...updateRow[columnIndex], letter: key };
-    setCurrentRow(updateRow);
-    let newBoard = [...board];
-    newBoard[rowIndex] = updateRow;
-    setBoard(newBoard); // Update the board state with the new board
-    let currentCol = columnIndex < 5 ? columnIndex + 1 : columnIndex;
-    setColumnIndex(currentCol); // Move to the next column
+    // Find the first empty tile in the current row
+    const firstEmptyTileIndex = updateRow.findIndex(
+      (tile) => tile.letter === ""
+    );
+    // Ensure there's an empty tile to update
+    if (firstEmptyTileIndex !== -1) {
+      updateRow[firstEmptyTileIndex] = {
+        ...updateRow[firstEmptyTileIndex],
+        letter: key,
+      };
+      setCurrentRow(updateRow);
+      let newBoard = [...board];
+      newBoard[rowIndex] = updateRow;
+      setBoard(newBoard); // Update the board state with the new board
+      // Update columnIndex to point to the next empty tile, or stay if the row is full
+      setColumnIndex(
+        firstEmptyTileIndex < 4 ? firstEmptyTileIndex + 1 : firstEmptyTileIndex
+      );
+    }
   };
 
   return (
@@ -116,13 +127,13 @@ function App() {
         justifyContent: "space-between",
         height: "100vh",
         width: "100vw",
-        gap: 1,
+        bgcolor: "whitesmoke",
       }}
     >
       <Header />
       <AppContext.Provider value={{ board, setBoard, handleVirtualKeyPress }}>
         <TileBoard />
-        <MessageCenter message={message} open={openSnackbar} />
+        <MessageCenter message={message}  wordFound={wordFound} />
         <Keyboard />
       </AppContext.Provider>
     </Box>
@@ -133,14 +144,33 @@ export default App;
 
 // function to parse word after pressing enter
 function parseWord(word, wordChosen, parsedRow) {
+  // Copy the chosen word to keep track of letters that have already been matched
+  let remainingLetters = wordChosen.split("");
+
+  // First pass: mark correct letters (green)
   for (let i = 0; i < word.length; i++) {
     if (word[i] === wordChosen[i]) {
-      parsedRow[i].backgroundColor = "green";
-    } else if (wordChosen.includes(word[i])) {
-      parsedRow[i].backgroundColor = "yellow";
-    } else {
-      parsedRow[i].backgroundColor = "grey";
+      parsedRow[i].backgroundColor = "darkseagreen";
+      // Remove matched letter to not count it again
+      remainingLetters[i] = null;
     }
   }
+
+  // Second pass: mark present but incorrectly positioned letters (yellow)
+  for (let i = 0; i < word.length; i++) {
+    if (word[i] !== wordChosen[i] && remainingLetters.includes(word[i])) {
+      parsedRow[i].backgroundColor = "burlywood";
+      // Remove the letter from remainingLetters to avoid marking it again
+      let indexToRemove = remainingLetters.indexOf(word[i]);
+      if (indexToRemove !== -1) {
+        remainingLetters[indexToRemove] = null;
+      }
+    }
+    // If not green or yellow, it's gray
+    if (parsedRow[i].backgroundColor === "white") {
+      parsedRow[i].backgroundColor = "gainsboro";
+    }
+  }
+
   return parsedRow;
 }

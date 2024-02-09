@@ -7,11 +7,16 @@ import Button from "@mui/material/Button";
 import { useContext } from "react";
 import { AppContext } from "../../App";
 
-function Key({ letter }) {
+function Key({ letter, bgcolor, status }) {
   const { handleVirtualKeyPress } = useContext(AppContext);
   let width = letter === "ENTER" || letter === "Del" ? 65 : 43;
   const fontSize = letter === "ENTER" ? "subtitle2" : "h6";
-  const letterKey = letter === "Del" ? <BackspaceIcon /> : letter;
+  const letterKey =
+    letter === "Del" ? (
+      <BackspaceIcon style={{ verticalAlign: "middle" }} />
+    ) : (
+      letter
+    );
   return (
     <Grid item>
       <Box
@@ -20,7 +25,7 @@ function Key({ letter }) {
           justifyContent: "center",
           alignItems: "center",
           width: width,
-          height: 58,
+          height: 56,
         }}
       >
         <Paper
@@ -29,8 +34,9 @@ function Key({ letter }) {
             justifyContent: "center",
             alignItems: "center",
             width: { width }, // Match the size of the Box
-            height: 58,
+            height: 56,
             overflow: "hidden",
+            bgcolor: bgcolor,
           }}
           elevation={3}
         >
@@ -43,7 +49,10 @@ function Key({ letter }) {
             }}
             onClick={() => handleVirtualKeyPress(letter)}
           >
-            <Typography variant={fontSize} sx={{ fontWeight: "bold" }}>
+            <Typography
+              variant={fontSize}
+              sx={{ fontWeight: "bold", color: "black" }}
+            >
               {letterKey}
             </Typography>
           </Button>
