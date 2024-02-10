@@ -24,7 +24,10 @@ function Key({ letter, bgcolor, status }) {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          width: width,
+          width: (theme) => ({
+            xs: `${width - 5}px`, // For extra-small screens
+            md: `${width}px`, // For medium screens
+          }),
           height: 56,
         }}
       >
@@ -33,7 +36,10 @@ function Key({ letter, bgcolor, status }) {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            width: { width }, // Match the size of the Box
+            width: (theme) => ({
+              xs: `${width - 5}px`, // For extra-small screens
+              md: `${width}px`, // For medium screens
+            }),
             height: 56,
             overflow: "hidden",
             bgcolor: bgcolor,
