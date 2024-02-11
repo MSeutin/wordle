@@ -20,7 +20,8 @@ function App() {
   const [wordFound, setWordFound] = useState(false);
   const [message, setMessage] = useState("");
   const [wordChosen, setWordChosen] = useState(getRandomWord());
-  console.log(wordChosen);
+  const [keepOpen, setKeepOpen] = useState(false);
+  const [endGame, setEndGame] = useState(false);
 
   // helper functions
   const isInWordList = (word) => {
@@ -38,6 +39,9 @@ function App() {
   const handleVirtualKeyPress = (key) => {
     if (wordFound) {
       setMessage("You found the word!");
+      return;
+    }
+    if (endGame) {
       return;
     }
     switch (key) {
@@ -80,6 +84,7 @@ function App() {
     setCurrentRow(parsedRow);
 
     if (word === wordChosen) {
+      setKeepOpen(true);
       setMessage("You found the word!");
       setWordFound(true);
     } else {
@@ -92,6 +97,12 @@ function App() {
       setCurrentRow(guessArea[newRowIndex]);
     }
     updateVirtualKeyboard(parsedRow);
+    if (rowIndex === 5) {
+      setKeepOpen(true);
+      setMessage(wordChosen);
+      setEndGame(true);
+      return;
+    }
   };
 
     const updateVirtualKeyboard = (parsedRow) => {
@@ -148,12 +159,12 @@ function App() {
         bgcolor: "whitesmoke",
       }}
     >
-      <Header wordChosen={wordChosen} />
+      <Header />
       <AppContext.Provider
         value={{ guessArea, setGuessArea, handleVirtualKeyPress }}
       >
         <TileBoard />
-        <MessageCenter message={message} wordFound={wordFound} />
+        <MessageCenter message={message} keepOpen={keepOpen} />
         <Keyboard virtualKeyboard={virtualKeyboard} />
       </AppContext.Provider>
     </Box>

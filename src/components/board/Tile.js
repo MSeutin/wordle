@@ -29,7 +29,7 @@ function Tile({ letter, backgroundColor }) {
           <Typography variant="h6" sx={{ fontWeight: "bold" }}>
             {letter}
           </Typography>
-        </Paper>
+          </Paper>
       </Box>
     </Grid>
   );
