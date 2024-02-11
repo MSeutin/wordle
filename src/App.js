@@ -4,12 +4,11 @@ import TileBoard from "./components/board/TileBoard";
 import Keyboard from "./components/keyboard/Keyboard";
 import MessageCenter from "./components/shared/MessageCenter";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import { useState, createContext } from "react";
 import { getGuessArea, getVirtualKeyboard } from "./utils/gameLogic";
 import { getRandomWord } from "./utils/gameLogic";
 import fiveLetterWords from "./data/fiveLetterWords";
-import { frenchFlagBg } from "./utils/gameLogic";
+import { defaultBg } from "./utils/backgroundFlags";
 
 export const AppContext = createContext();
 
@@ -24,10 +23,8 @@ function App() {
   const [wordChosen, setWordChosen] = useState(getRandomWord());
   const [keepOpen, setKeepOpen] = useState(false);
   const [endGame, setEndGame] = useState(false);
-  const [flagBackground, setFlagBackground] = useState(false);
+  const [background, setBackground] = useState(defaultBg);
 
-  // Handler to toggle the flag background
-  const toggleFlagBackground = () => setFlagBackground(!flagBackground);
 
   // helper functions
   const isInWordList = (word) => {
@@ -156,20 +153,10 @@ function App() {
   return (
     <Box
       sx={
-        flagBackground
-          ? frenchFlagBg
-          : {
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "space-between",
-              height: "100vh",
-              width: "100vw",
-              bgcolor: "whitesmoke",
-            }
+        background
       }
     >
-      <Header toggleFlagBackground={toggleFlagBackground} />
+      <Header setBackground={setBackground} />
       <AppContext.Provider
         value={{ guessArea, setGuessArea, handleVirtualKeyPress }}
       >
