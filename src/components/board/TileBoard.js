@@ -11,7 +11,6 @@ function TileBoard() {
       justifyContent="center"
       alignItems="center"
       gap={1}
-      sx={{ marginTop: "-20px" }}
     >
       {guessArea.map((row, index) => (
         <TileRow key={index} row={row} />

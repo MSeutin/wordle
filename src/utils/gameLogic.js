@@ -17,42 +17,51 @@ export function getGuessArea() {
 
 export function getVirtualKeyboard() {
   const keyRowTop = [
-        { letter: "Q", bgcolor: "thistle" },
-        { letter: "W", bgcolor: "thistle" },
-        { letter: "E", bgcolor: "thistle" },
-        { letter: "R", bgcolor: "thistle" },
-        { letter: "T", bgcolor: "thistle" },
-        { letter: "Y", bgcolor: "thistle"  },
-        { letter: "U", bgcolor: "thistle"  },
-        { letter: "I", bgcolor: "thistle"  },
-        { letter: "O", bgcolor: "thistle"  },
-        { letter: "P", bgcolor: "thistle" },
+        { letter: "Q", bgcolor: "aliceblue" },
+        { letter: "W", bgcolor: "aliceblue" },
+        { letter: "E", bgcolor: "aliceblue" },
+        { letter: "R", bgcolor: "aliceblue" },
+        { letter: "T", bgcolor: "aliceblue" },
+        { letter: "Y", bgcolor: "aliceblue"  },
+        { letter: "U", bgcolor: "aliceblue"  },
+        { letter: "I", bgcolor: "aliceblue"  },
+        { letter: "O", bgcolor: "aliceblue"  },
+        { letter: "P", bgcolor: "aliceblue" },
     ]
     const keyRowMiddle = [
-        { letter: "A", bgcolor: "thistle"  },
-        { letter: "S", bgcolor: "thistle"  },
-        { letter: "D", bgcolor: "thistle"  },
-        { letter: "F", bgcolor: "thistle"  },
-        { letter: "G", bgcolor: "thistle"  },
-        { letter: "H", bgcolor: "thistle"  },
-        { letter: "J", bgcolor: "thistle"  },
-        { letter: "K", bgcolor: "thistle"  },
-        { letter: "L", bgcolor: "thistle"  },
+        { letter: "A", bgcolor: "aliceblue"  },
+        { letter: "S", bgcolor: "aliceblue"  },
+        { letter: "D", bgcolor: "aliceblue"  },
+        { letter: "F", bgcolor: "aliceblue"  },
+        { letter: "G", bgcolor: "aliceblue"  },
+        { letter: "H", bgcolor: "aliceblue"  },
+        { letter: "J", bgcolor: "aliceblue"  },
+        { letter: "K", bgcolor: "aliceblue"  },
+        { letter: "L", bgcolor: "aliceblue"  },
     ]
     const keyRowBottom = [
-        { letter: "ENTER", bgcolor: "thistle"  },
-        { letter: "Z", bgcolor: "thistle"  },
-        { letter: "X", bgcolor: "thistle"  },
-        { letter: "C", bgcolor: "thistle"  },
-        { letter: "V", bgcolor: "thistle"  },
-        { letter: "B", bgcolor: "thistle"  },
-        { letter: "N", bgcolor: "thistle"  },
-        { letter: "M", bgcolor: "thistle"  },
-        { letter: "Del", bgcolor: "thistle"  },
+        { letter: "ENTER", bgcolor: "aliceblue"  },
+        { letter: "Z", bgcolor: "aliceblue"  },
+        { letter: "X", bgcolor: "aliceblue"  },
+        { letter: "C", bgcolor: "aliceblue"  },
+        { letter: "V", bgcolor: "aliceblue"  },
+        { letter: "B", bgcolor: "aliceblue"  },
+        { letter: "N", bgcolor: "aliceblue"  },
+        { letter: "M", bgcolor: "aliceblue"  },
+        { letter: "Del", bgcolor: "aliceblue"  },
     ]
   const keyboard = [keyRowTop, keyRowMiddle, keyRowBottom];
   return keyboard;
 }
 
-// questions
-// asynchronus states give issues somrtimes, so update w temp variable ok ?
+export const frenchFlagBg = {
+  backgroundImage:
+    "linear-gradient(to right, #87cefa 33%, #ffffff 33%, #ffffff 66%, #ff6347 66%)",
+  backgroundSize: "100% 100%",
+  width: "100%",
+  minHeight: "100vh",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "space-between",
+};

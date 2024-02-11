@@ -6,40 +6,65 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Tooltip from "@mui/material/Tooltip";
+import SettingsIcon from "@mui/icons-material/Settings";
 
-
-function Header() {
+function Header({ toggleFlagBackground }) {
   const handlePlayAgain = () => {
-  window.location.reload();
-};
+    window.location.reload();
+  };
   return (
     <Box sx={{ width: "100vw", height: 66 }}>
       <AppBar position="static" sx={{ backgroundColor: "#fff", color: "#000" }}>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Tooltip title="App by Frenchmike">
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Tooltip title="Change Background">
+              <IconButton
+                onClick={toggleFlagBackground}
+                sx={{
+                  ml: 2, // Adds some space to the left of the icon button
+                  color: "inherit", // Uses the current color
+                }}
+              >
+                <SettingsIcon />
+              </IconButton>
+            </Tooltip>
+          </Box>
+            <Tooltip title="App by Frenchmike">
+            <Button
+              variant="text"
+              onClick={toggleFlagBackground}
+              sx={{
+                fontWeight: "bold",
+                fontFamily: "Protest Guerrilla", // Change as per your preference
+                fontSize: "1.4rem", // Makes the font larger
+                letterSpacing: "0.1rem", // Increases spacing between letters
+              }}
             >
-              <MenuIcon />
-            </IconButton>
-          </Tooltip>
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{
-              fontWeight: "bold",
-              fontSize: "2rem", // Makes the font larger
-              letterSpacing: "0.1rem", // Increases spacing between letters
-              fontFamily: "Protest Guerrilla",
-              // fontFamily: 'Indie Flower',
-            }}
-          >
-            Wordle
-          </Typography>
+              <Box display="flex" justifyContent="center" alignItems="center">
+                <Typography
+                  variant="h4"
+                  component="span"
+                  sx={{ color: "#0055a4" }}
+                >
+                  Wo
+                </Typography>
+                <Typography
+                  variant="h4"
+                  component="span"
+                  sx={{ color: "#d3d3d3" }}
+                >
+                  rd
+                </Typography>
+                <Typography
+                  variant="h4"
+                  component="span"
+                  sx={{ color: "#ef4135" }}
+                >
+                  le
+                </Typography>
+              </Box>
+              </Button>
+            </Tooltip>
           <Button
             onClick={handlePlayAgain}
             sx={{
