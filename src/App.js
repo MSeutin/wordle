@@ -108,20 +108,35 @@ function App() {
     }
   };
 
-  const updateVirtualKeyboard = (parsedRow) => {
-    let newVirtualKeyboard = virtualKeyboard.map((keyboardRow) =>
-      keyboardRow.map((key) => {
-        const foundRow = parsedRow.find(
-          ({ letter }) => letter.toUpperCase() === key.letter
-        );
-        if (foundRow && key.bgcolor !== "darkseagreen") {
-          return { ...key, bgcolor: foundRow.backgroundColor };
-        }
-        return key;
-      })
-    );
-    setVirtualKeyboard(newVirtualKeyboard);
-  };
+
+const updateVirtualKeyboard = (parsedRow) => {
+  // Map over each row in the virtual keyboard
+  let newVirtualKeyboard = virtualKeyboard.map((row) =>
+    // Map over each key in the row
+    row.map((key) => {
+      // Find the corresponding parsed row entry by letter
+      const foundRow = parsedRow.find(
+        ({ letter }) => letter.toUpperCase() === key.letter
+      );
+      // If found, and if the key's bgcolor is not already set to green (or the new color is green),
+      // update the key's bgcolor. Otherwise, return the key as is.
+      if (
+        foundRow &&
+        (key.bgcolor !== "darkseagreen" ||
+          foundRow.backgroundColor === "darkseagreen")
+      ) {
+        return { ...key, bgcolor: foundRow.backgroundColor };
+      }
+      return key;
+    })
+  );
+  // Update the state with the new virtual keyboard
+  setVirtualKeyboard(newVirtualKeyboard);
+};
+
+
+
+
 
   // HANDLE LETTER INPUT
   const handleLetterInput = (key) => {
