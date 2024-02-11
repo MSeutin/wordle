@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { AppContext } from "../../App";
 
 function TileBoard() {
-  const { board } = useContext(AppContext);
+  const { guessArea } = useContext(AppContext);
   return (
     <Grid
       container
@@ -13,7 +13,7 @@ function TileBoard() {
       gap={1}
       sx={{ marginTop: "-20px" }}
     >
-      {board.map((row, index) => (
+      {guessArea.map((row, index) => (
         <TileRow key={index} row={row} />
       ))}
     </Grid>

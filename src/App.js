@@ -5,17 +5,18 @@ import Keyboard from "./components/keyboard/Keyboard";
 import MessageCenter from "./components/shared/MessageCenter";
 import Box from "@mui/material/Box";
 import { useState, createContext } from "react";
-import { createBoard } from "./utils/gameLogic";
+import { getGuessArea, getVirtualKeyboard } from "./utils/gameLogic";
 import { getRandomWord } from "./utils/gameLogic";
 import fiveLetterWords from "./data/fiveLetterWords";
 
 export const AppContext = createContext();
 
 function App() {
-  const [board, setBoard] = useState(createBoard());
+  const [guessArea, setGuessArea] = useState(getGuessArea());
+  const [virtualKeyboard, setVirtualKeyboard] = useState(getVirtualKeyboard());
   const [rowIndex, setRowIndex] = useState(0);
   const [columnIndex, setColumnIndex] = useState(0);
-  const [currentRow, setCurrentRow] = useState(board[0]);
+  const [currentRow, setCurrentRow] = useState(guessArea[0]);
   const [wordFound, setWordFound] = useState(false);
   const [message, setMessage] = useState("");
   const [wordChosen, setWordChosen] = useState(getRandomWord());
@@ -56,9 +57,9 @@ function App() {
     let updateRow = [...currentRow];
     updateRow[columnIndex] = { ...updateRow[columnIndex], letter: "" };
     setCurrentRow(updateRow);
-    let newBoard = [...board];
+    let newBoard = [...guessArea];
     newBoard[rowIndex] = updateRow;
-    setBoard(newBoard); // Update the board state with the new board
+    setGuessArea(newBoard); // Update the guessArea state with the new guessArea
     let currentCol = columnIndex > 0 ? columnIndex - 1 : columnIndex;
     setColumnIndex(currentCol); // Move to the previous column
   };
@@ -74,10 +75,11 @@ function App() {
       setMessage("Not in word list");
       return;
     }
+    let parsedRow = [...currentRow];
+    parsedRow = parseWord(word, wordChosen, parsedRow);
+    setCurrentRow(parsedRow);
+
     if (word === wordChosen) {
-      let parsedRow = [...currentRow];
-      parsedRow = parseWord(word, wordChosen, parsedRow);
-      setCurrentRow(parsedRow);
       setMessage("You found the word!");
       setWordFound(true);
     } else {
@@ -87,9 +89,25 @@ function App() {
       let newRowIndex = rowIndex + 1;
       setRowIndex(newRowIndex);
       setColumnIndex(0);
-      setCurrentRow(board[newRowIndex]);
+      setCurrentRow(guessArea[newRowIndex]);
     }
+    updateVirtualKeyboard(parsedRow);
   };
+
+    const updateVirtualKeyboard = (parsedRow) => {
+      let newVirtualKeyboard = virtualKeyboard.map((keyboardRow) =>
+        keyboardRow.map((key) => {
+          const foundRow = parsedRow.find(
+            ({ letter }) => letter.toUpperCase() === key.letter
+          );
+          if (foundRow && key.bgcolor !== "darkseagreen") {
+            return { ...key, bgcolor: foundRow.backgroundColor };
+          }
+          return key;
+        })
+      );
+      setVirtualKeyboard(newVirtualKeyboard);
+    };
 
   // HANDLE LETTER INPUT
   const handleLetterInput = (key) => {
@@ -108,9 +126,9 @@ function App() {
         letter: key,
       };
       setCurrentRow(updateRow);
-      let newBoard = [...board];
+      let newBoard = [...guessArea];
       newBoard[rowIndex] = updateRow;
-      setBoard(newBoard); // Update the board state with the new board
+      setGuessArea(newBoard); // Update the guessArea state with the new guessArea
       // Update columnIndex to point to the next empty tile, or stay if the row is full
       setColumnIndex(
         firstEmptyTileIndex < 4 ? firstEmptyTileIndex + 1 : firstEmptyTileIndex
@@ -130,11 +148,13 @@ function App() {
         bgcolor: "whitesmoke",
       }}
     >
-      <Header />
-      <AppContext.Provider value={{ board, setBoard, handleVirtualKeyPress }}>
+      <Header wordChosen={wordChosen} />
+      <AppContext.Provider
+        value={{ guessArea, setGuessArea, handleVirtualKeyPress }}
+      >
         <TileBoard />
-        <MessageCenter message={message}  wordFound={wordFound} />
-        <Keyboard />
+        <MessageCenter message={message} wordFound={wordFound} />
+        <Keyboard virtualKeyboard={virtualKeyboard} />
       </AppContext.Provider>
     </Box>
   );

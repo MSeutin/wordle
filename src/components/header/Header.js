@@ -8,7 +8,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Tooltip from "@mui/material/Tooltip";
 
 
-function Header() {
+function Header({wordChosen}) {
   const handlePlayAgain = () => {
   window.location.reload();
 };
@@ -38,7 +38,7 @@ function Header() {
               // fontFamily: 'Indie Flower',
             }}
           >
-            Wordle
+            Wordle - {wordChosen}
           </Typography>
           <Button
             onClick={handlePlayAgain}
