@@ -25,6 +25,9 @@ function App() {
   const [endGame, setEndGame] = useState(false);
   const [background, setBackground] = useState(defaultBg);
 
+  // console.log(wordChosen);
+  console.log("wordChosen: ", wordChosen);
+
 
   // helper functions
   const isInWordList = (word) => {
