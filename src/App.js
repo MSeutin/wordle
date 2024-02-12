@@ -4,11 +4,12 @@ import TileBoard from "./components/board/TileBoard";
 import Keyboard from "./components/keyboard/Keyboard";
 import MessageCenter from "./components/shared/MessageCenter";
 import Box from "@mui/material/Box";
-import { useState, createContext } from "react";
+import { useState, useEffect, createContext } from "react";
 import { getGuessArea, getVirtualKeyboard } from "./utils/gameLogic";
 import { getRandomWord } from "./utils/gameLogic";
 import fiveLetterWords from "./data/fiveLetterWords";
 import { defaultBg } from "./utils/backgroundFlags";
+import { parseWord } from "./utils/gameLogic";
 
 export const AppContext = createContext();
 
@@ -20,14 +21,36 @@ function App() {
   const [currentRow, setCurrentRow] = useState(guessArea[0]);
   const [wordFound, setWordFound] = useState(false);
   const [message, setMessage] = useState("");
-  const [wordChosen, setWordChosen] = useState(getRandomWord());
   const [keepOpen, setKeepOpen] = useState(false);
   const [endGame, setEndGame] = useState(false);
   const [background, setBackground] = useState(defaultBg);
+  const [wordChosen, setWordChosen] = useState(getRandomWord());
+
+  // Function to reset the virtual keyboard
+  const resetVirtualKeyboard = () => {
+    setVirtualKeyboard(getVirtualKeyboard());
+  };
+
+  // Function to start a new game
+  const startNewGame = () => {
+    const newGuessArea = getGuessArea();
+    setGuessArea(newGuessArea); // Reset guess area
+    resetVirtualKeyboard(); // Reset virtual keyboard
+    setRowIndex(0);
+    setColumnIndex(0);
+    setCurrentRow(newGuessArea[0]);
+    setWordFound(false);
+    setMessage("");
+    setKeepOpen(false);
+    setEndGame(false);
+    setBackground(defaultBg);
+    setWordChosen(getRandomWord()); // Set a new random word
+  };
 
   // console.log(wordChosen);
-  console.log("wordChosen: ", wordChosen);
-
+  useEffect(() => {
+    console.log("wordChosen: ", wordChosen);
+  }, [wordChosen]);
 
   // helper functions
   const isInWordList = (word) => {
@@ -94,9 +117,7 @@ function App() {
       setMessage("You found the word!");
       setWordFound(true);
     } else {
-      let parsedRow = [...currentRow];
-      parsedRow = parseWord(word, wordChosen, parsedRow);
-      setCurrentRow(parsedRow);
+      setCurrentRow((currentRow) => parseWord(word, wordChosen, currentRow));
       let newRowIndex = rowIndex + 1;
       setRowIndex(newRowIndex);
       setColumnIndex(0);
@@ -111,35 +132,30 @@ function App() {
     }
   };
 
-
-const updateVirtualKeyboard = (parsedRow) => {
-  // Map over each row in the virtual keyboard
-  let newVirtualKeyboard = virtualKeyboard.map((row) =>
-    // Map over each key in the row
-    row.map((key) => {
-      // Find the corresponding parsed row entry by letter
-      const foundRow = parsedRow.find(
-        ({ letter }) => letter.toUpperCase() === key.letter
-      );
-      // If found, and if the key's bgcolor is not already set to green (or the new color is green),
-      // update the key's bgcolor. Otherwise, return the key as is.
-      if (
-        foundRow &&
-        (key.bgcolor !== "darkseagreen" ||
-          foundRow.backgroundColor === "darkseagreen")
-      ) {
-        return { ...key, bgcolor: foundRow.backgroundColor };
-      }
-      return key;
-    })
-  );
-  // Update the state with the new virtual keyboard
-  setVirtualKeyboard(newVirtualKeyboard);
-};
-
-
-
-
+  const updateVirtualKeyboard = (parsedRow) => {
+    // Map over each row in the virtual keyboard
+    let newVirtualKeyboard = virtualKeyboard.map((row) =>
+      // Map over each key in the row
+      row.map((key) => {
+        // Find the corresponding parsed row entry by letter
+        const foundRow = parsedRow.find(
+          ({ letter }) => letter.toUpperCase() === key.letter
+        );
+        // If found, and if the key's bgcolor is not already set to green (or the new color is green),
+        // update the key's bgcolor. Otherwise, return the key as is.
+        if (
+          foundRow &&
+          (key.bgcolor !== "darkseagreen" ||
+            foundRow.backgroundColor === "darkseagreen")
+        ) {
+          return { ...key, bgcolor: foundRow.backgroundColor };
+        }
+        return key;
+      })
+    );
+    // Update the state with the new virtual keyboard
+    setVirtualKeyboard(newVirtualKeyboard);
+  };
 
   // HANDLE LETTER INPUT
   const handleLetterInput = (key) => {
@@ -169,12 +185,8 @@ const updateVirtualKeyboard = (parsedRow) => {
   };
 
   return (
-    <Box
-      sx={
-        background
-      }
-    >
-      <Header setBackground={setBackground} />
+    <Box sx={background}>
+      <Header setBackground={setBackground} startNewGame={startNewGame} />
       <AppContext.Provider
         value={{ guessArea, setGuessArea, handleVirtualKeyPress }}
       >
@@ -188,35 +200,3 @@ const updateVirtualKeyboard = (parsedRow) => {
 
 export default App;
 
-// function to parse word after pressing enter
-function parseWord(word, wordChosen, parsedRow) {
-  // Copy the chosen word to keep track of letters that have already been matched
-  let remainingLetters = wordChosen.split("");
-
-  // First pass: mark correct letters (green)
-  for (let i = 0; i < word.length; i++) {
-    if (word[i] === wordChosen[i]) {
-      parsedRow[i].backgroundColor = "darkseagreen";
-      // Remove matched letter to not count it again
-      remainingLetters[i] = null;
-    }
-  }
-
-  // Second pass: mark present but incorrectly positioned letters (yellow)
-  for (let i = 0; i < word.length; i++) {
-    if (word[i] !== wordChosen[i] && remainingLetters.includes(word[i])) {
-      parsedRow[i].backgroundColor = "burlywood";
-      // Remove the letter from remainingLetters to avoid marking it again
-      let indexToRemove = remainingLetters.indexOf(word[i]);
-      if (indexToRemove !== -1) {
-        remainingLetters[indexToRemove] = null;
-      }
-    }
-    // If not green or yellow, it's gray
-    if (parsedRow[i].backgroundColor === "white") {
-      parsedRow[i].backgroundColor = "gainsboro";
-    }
-  }
-
-  return parsedRow;
-}

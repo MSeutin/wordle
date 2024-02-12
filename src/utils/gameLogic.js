@@ -53,3 +53,36 @@ export function getVirtualKeyboard() {
   const keyboard = [keyRowTop, keyRowMiddle, keyRowBottom];
   return keyboard;
 }
+
+// function to parse word after pressing enter
+export function parseWord(word, wordChosen, parsedRow) {
+  // Copy the chosen word to keep track of letters that have already been matched
+  let remainingLetters = wordChosen.split("");
+
+  // First pass: mark correct letters (green)
+  for (let i = 0; i < word.length; i++) {
+    if (word[i] === wordChosen[i]) {
+      parsedRow[i].backgroundColor = "darkseagreen";
+      // Remove matched letter to not count it again
+      remainingLetters[i] = null;
+    }
+  }
+
+  // Second pass: mark present but incorrectly positioned letters (yellow)
+  for (let i = 0; i < word.length; i++) {
+    if (word[i] !== wordChosen[i] && remainingLetters.includes(word[i])) {
+      parsedRow[i].backgroundColor = "burlywood";
+      // Remove the letter from remainingLetters to avoid marking it again
+      let indexToRemove = remainingLetters.indexOf(word[i]);
+      if (indexToRemove !== -1) {
+        remainingLetters[indexToRemove] = null;
+      }
+    }
+    // If not green or yellow, it's gray
+    if (parsedRow[i].backgroundColor === "white") {
+      parsedRow[i].backgroundColor = "gainsboro";
+    }
+  }
+
+  return parsedRow;
+}

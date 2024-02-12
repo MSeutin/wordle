@@ -13,12 +13,9 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import { defaultBg, frenchFlagBg, italianFlagBg } from "../../utils/backgroundFlags";
 import { useState } from "react";
 
-function Header({ setBackground }) {
+function Header({ setBackground, startNewGame }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const handlePlayAgain = () => {
-    window.location.reload();
-  };
 
     const handleMouseEnter = (event) => {
       setAnchorEl(event.currentTarget);
@@ -137,7 +134,7 @@ function Header({ setBackground }) {
             </Button>
           </Tooltip>
           <Button
-            onClick={handlePlayAgain}
+            onClick={startNewGame}
             sx={{
               backgroundColor: "#36454F", // A warm toned down color
               color: "#f2f2f2",
