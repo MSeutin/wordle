@@ -52,7 +52,6 @@ function Header({ setBackground }) {
               color="inherit"
               aria-label="settings"
               onMouseEnter={handleMouseEnter}
-              sx={{ ml: 2 }}
             >
               <SettingsIcon />
             </IconButton>

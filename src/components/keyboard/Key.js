@@ -25,7 +25,7 @@ function Key({ letter, bgcolor, status }) {
           justifyContent: "center",
           alignItems: "center",
           width: (theme) => ({
-            xs: `${width - 5}px`, // For extra-small screens
+            xs: `${width - 14}px`, // For extra-small screens
             md: `${width}px`, // For medium screens
           }),
           height: 56,
@@ -37,7 +37,7 @@ function Key({ letter, bgcolor, status }) {
             justifyContent: "center",
             alignItems: "center",
             width: (theme) => ({
-              xs: `${width - 5}px`, // For extra-small screens
+              xs: `${width - 14}px`, // For extra-small screens
               md: `${width}px`, // For medium screens
             }),
             height: 56,
