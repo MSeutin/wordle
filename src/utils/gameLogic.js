@@ -1,8 +1,8 @@
 // game logic
-import fiveLetterWords from "../data/fiveLetterWords";
+import usableWords from "../data/usableWords";
 
 export function getRandomWord() {
-  return fiveLetterWords[Math.floor(Math.random() * fiveLetterWords.length)];
+  return usableWords[Math.floor(Math.random() * usableWords.length)];
 }
 
 export function getGuessArea() {
