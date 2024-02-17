@@ -4,49 +4,30 @@ import TileBoard from "./components/board/TileBoard";
 import Keyboard from "./components/keyboard/Keyboard";
 import MessageCenter from "./components/shared/MessageCenter";
 import Box from "@mui/material/Box";
-import { useState, useEffect, createContext } from "react";
+import { useState, useEffect} from "react";
 import {
-  getGuessArea,
-  getVirtualKeyboard,
-  getRandomWord,
   parseWord,
   isInWordList,
+  getInitialState
 } from "./utils/gameLogic";
-import { defaultBg } from "./utils/backgroundFlags";
-
-export const AppContext = createContext();
+import updateKeyboardBg from "./utils/updateKeyboardBg";
 
 function App() {
-  const initialState = {
-    guessArea: getGuessArea(),
-    virtualKeyboard: getVirtualKeyboard(),
-    rowIndex: 0,
-    columnIndex: 0,
-    currentRow: getGuessArea()[0],
-    wordFound: false,
-    message: "",
-    keepOpen: false,
-    endGame: false,
-    background: defaultBg,
-    wordChosen: getRandomWord(),
-  };
-
-  const [state, setState] = useState(initialState);
+  const [state, setState] = useState(getInitialState);
 
   const startNewGame = () => {
-    setState({ ...initialState, wordChosen: getRandomWord() });
+    setState({ ...getInitialState() });
   };
 
-  const setBackground = (flag) => {
-    setState({ ...state, background: flag });
-  };
+  // grab current row
+  const currentRow = state.guessArea[state.rowIndex];
 
   useEffect(() => {
     console.log("wordChosen: ", state.wordChosen);
   }, [state.wordChosen]);
 
   const getCurrentWord = () => {
-    return state.currentRow
+    return currentRow
       .map(({ letter }) => letter)
       .join("")
       .toLowerCase();
@@ -69,28 +50,27 @@ function App() {
   // ****** Delete Last Letter Function ****** //
   const deleteLastLetter = () => {
     setState((prev) => {
-      // Can't delete if there's nothing entered
       if (prev.columnIndex === 0) return prev;
-
-      // Adjust for the fact columnIndex points to the next insertion spot
       const lastIndexToDelete = prev.columnIndex - 1;
-      const updatedRow = prev.currentRow.map((tile, index) =>
-        index === lastIndexToDelete ? { ...tile, letter: "" } : tile
-      );
-
-      const updatedGuessArea = prev.guessArea.map((row, idx) =>
-        idx === prev.rowIndex ? updatedRow : row
-      );
+      const newGuessArea = prev.guessArea.map((row, idx) => {
+        if (idx === prev.rowIndex) {
+          return row.map((tile, index) => {
+            if (index === lastIndexToDelete) {
+              return { ...tile, letter: "" };
+            }
+            return tile;
+          });
+        }
+        return row;
+      });
 
       return {
         ...prev,
-        currentRow: updatedRow,
-        guessArea: updatedGuessArea,
-        columnIndex: lastIndexToDelete, // Adjust columnIndex after deletion
+        guessArea: newGuessArea,
+        columnIndex: lastIndexToDelete,
       };
     });
   };
-
 
   // ****** Submit Word Function ****** //
   const submitWord = () => {
@@ -99,15 +79,13 @@ function App() {
     if (word.length < 5) {
       setState((prev) => ({ ...prev, message: "Not enough letters" }));
       return;
-    }
-
-    if (!isInWordList(word)) {
+    } else if (!isInWordList(word)) {
       setState((prev) => ({ ...prev, message: "Not in word list" }));
       return;
     }
 
     setState((prev) => {
-      const parsedRow = parseWord(word, prev.wordChosen, [...prev.currentRow]);
+      const parsedRow = parseWord(word, prev.wordChosen, [...currentRow]);
       const newRowIndex = prev.rowIndex + 1;
 
       const updatedGuessArea = prev.guessArea.map((row, index) =>
@@ -120,7 +98,7 @@ function App() {
       };
 
       // Directly calculate the new virtual keyboard based on newState
-      const newVirtualKeyboard = updateVirtualKeyboard(parsedRow, newState);
+      const newVirtualKeyboard = updateKeyboardBg(parsedRow, newState);
 
       if (word === prev.wordChosen) {
         newState = {
@@ -153,30 +131,9 @@ function App() {
     });
   };
 
-  const updateVirtualKeyboard = (parsedRow, currentState) => {
-    // Directly map over currentState.virtualKeyboard to create a new virtual keyboard
-    return currentState.virtualKeyboard.map((row) =>
-      row.map((key) => {
-        const foundRow = parsedRow.find(
-          ({ letter }) => letter.toUpperCase() === key.letter
-        );
-        if (
-          foundRow &&
-          (key.bgcolor !== "darkseagreen" ||
-            foundRow.backgroundColor === "darkseagreen")
-        ) {
-          return { ...key, bgcolor: foundRow.backgroundColor };
-        }
-        return key;
-      })
-    );
-  };
-
   // ****** Add Letter Function ****** //
   const addLetter = (key) => {
-    const filledLength = state.currentRow.filter(
-      (tile) => tile.letter !== ""
-    ).length;
+    const filledLength = currentRow.filter((tile) => tile.letter !== "").length;
 
     // Check if the row is fully filled and set columnIndex to 5 for deletion logic
     if (filledLength === 5) {
@@ -188,7 +145,7 @@ function App() {
     if (filledLength > 4) return;
 
     // Update the row with the new letter
-    const updatedRow = [...state.currentRow];
+    const updatedRow = [...currentRow];
     updatedRow[filledLength] = { ...updatedRow[filledLength], letter: key };
 
     // Update the guess area with the modified row
@@ -200,15 +157,25 @@ function App() {
     setState((prevState) => ({
       ...prevState,
       guessArea: updatedGuessArea,
-      currentRow: updatedRow,
       columnIndex: filledLength + 1, // Increment columnIndex for next input
     }));
   };
 
-
   return (
-    <Box sx={state.background}>
-      <Header setBackground={setBackground} startNewGame={startNewGame} />
+    <Box
+      sx={{
+        width: "100%", // Cover the entire width
+        height: "100vh", // Cover the entire viewport height
+        backgroundImage: `url(${state.background})`, // Use the state to dynamically change the background image
+        backgroundSize: "cover", // Ensure the background covers the whole Box
+        backgroundPosition: "center", // Center the background image
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "space-between", // Push the content to the top and bottom
+      }}
+    >
+      <Header startNewGame={startNewGame} />
       <TileBoard guessArea={state.guessArea} />
       <MessageCenter message={state.message} keepOpen={state.keepOpen} />
       <Keyboard

@@ -10,10 +10,9 @@ import {
 } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { defaultBg, frenchFlagBg, italianFlagBg } from "../../utils/backgroundFlags";
 import { useState } from "react";
 
-function Header({ setBackground, startNewGame }) {
+function Header({ startNewGame }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -24,22 +23,10 @@ function Header({ setBackground, startNewGame }) {
     const handleMouseLeave = () => {
       setAnchorEl(null);
     };
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleFlagChange = (flagStyle) => {
-    setBackground(flagStyle);
-    handleMouseLeave();
-  };
+  
   return (
     <Box sx={{ width: "100vw", height: 66 }}>
-      <AppBar position="static" sx={{ backgroundColor: "#fff", color: "#000" }}>
+      <AppBar position="static" sx={{ backgroundColor: "rgba(10, 10, 10, 0.3)", color: "#000" }}>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <Toolbar>
             {/* Other toolbar items */}
@@ -63,7 +50,6 @@ function Header({ setBackground, startNewGame }) {
               }}
             >
               <MenuItem
-                onClick={() => handleFlagChange(defaultBg)}
                 sx={{
                   fontSize: "0.8rem",
                   fontWeight: "bold",
@@ -71,10 +57,9 @@ function Header({ setBackground, startNewGame }) {
                   margin: "5px 0",
                 }}
               >
-                Default Bg
+                Item 1
               </MenuItem>
               <MenuItem
-                onClick={() => handleFlagChange(frenchFlagBg)}
                 sx={{
                   fontSize: "0.8rem",
                   fontWeight: "bold",
@@ -82,10 +67,9 @@ function Header({ setBackground, startNewGame }) {
                   margin: "5px 0",
                 }}
               >
-                French Flag
+                Item 2
               </MenuItem>
               <MenuItem
-                onClick={() => handleFlagChange(italianFlagBg)}
                 sx={{
                   fontSize: "0.8rem",
                   fontWeight: "bold",
@@ -93,7 +77,7 @@ function Header({ setBackground, startNewGame }) {
                   margin: "5px 0",
                 }}
               >
-                Italian Flag
+                Item 3
               </MenuItem>
               {/* Add more flags as needed */}
             </Menu>

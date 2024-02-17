@@ -1,6 +1,7 @@
 // game logic
 import fiveLetterWords from "../data/fiveLetterWords";
 import usableWords from "../data/usableWords";
+import { getRandomCity } from "./cityImages";
 
 export function getRandomWord() {
   return usableWords[Math.floor(Math.random() * usableWords.length)];
@@ -92,3 +93,20 @@ export function parseWord(word, wordChosen, parsedRow) {
 export const isInWordList = (word) => {
   return fiveLetterWords.includes(word);
 };
+
+// get Initial State Function
+export function getInitialState() {
+  const currentCity = getRandomCity().src;
+    return {
+      guessArea: getGuessArea(),
+      virtualKeyboard: getVirtualKeyboard(),
+      rowIndex: 0,
+      columnIndex: 0,
+      wordFound: false,
+      message: "",
+      keepOpen: false,
+      endGame: false,
+      background: currentCity,
+      wordChosen: getRandomWord(),
+    };
+}
