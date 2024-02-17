@@ -1,4 +1,5 @@
 // game logic
+import fiveLetterWords from "../data/fiveLetterWords";
 import usableWords from "../data/usableWords";
 
 export function getRandomWord() {
@@ -10,7 +11,7 @@ export function getGuessArea() {
     Array.from({ length: 5 }, () => ({
       letter: "",
       backgroundColor: "white",
-    }))
+    })),
   );
   return board;
 }
@@ -86,3 +87,8 @@ export function parseWord(word, wordChosen, parsedRow) {
 
   return parsedRow;
 }
+
+// helper functions
+export const isInWordList = (word) => {
+  return fiveLetterWords.includes(word);
+};

@@ -5,144 +5,161 @@ import Keyboard from "./components/keyboard/Keyboard";
 import MessageCenter from "./components/shared/MessageCenter";
 import Box from "@mui/material/Box";
 import { useState, useEffect, createContext } from "react";
-import { getGuessArea, getVirtualKeyboard } from "./utils/gameLogic";
-import { getRandomWord } from "./utils/gameLogic";
-import fiveLetterWords from "./data/fiveLetterWords";
+import {
+  getGuessArea,
+  getVirtualKeyboard,
+  getRandomWord,
+  parseWord,
+  isInWordList,
+} from "./utils/gameLogic";
 import { defaultBg } from "./utils/backgroundFlags";
-import { parseWord } from "./utils/gameLogic";
 
 export const AppContext = createContext();
 
 function App() {
-  const [guessArea, setGuessArea] = useState(getGuessArea());
-  const [virtualKeyboard, setVirtualKeyboard] = useState(getVirtualKeyboard());
-  const [rowIndex, setRowIndex] = useState(0);
-  const [columnIndex, setColumnIndex] = useState(0);
-  const [currentRow, setCurrentRow] = useState(guessArea[0]);
-  const [wordFound, setWordFound] = useState(false);
-  const [message, setMessage] = useState("");
-  const [keepOpen, setKeepOpen] = useState(false);
-  const [endGame, setEndGame] = useState(false);
-  const [background, setBackground] = useState(defaultBg);
-  const [wordChosen, setWordChosen] = useState(getRandomWord());
-
-  // Function to reset the virtual keyboard
-  const resetVirtualKeyboard = () => {
-    setVirtualKeyboard(getVirtualKeyboard());
+  const initialState = {
+    guessArea: getGuessArea(),
+    virtualKeyboard: getVirtualKeyboard(),
+    rowIndex: 0,
+    columnIndex: 0,
+    currentRow: getGuessArea()[0],
+    wordFound: false,
+    message: "",
+    keepOpen: false,
+    endGame: false,
+    background: defaultBg,
+    wordChosen: getRandomWord(),
   };
 
-  // Function to start a new game
+  const [state, setState] = useState(initialState);
+
   const startNewGame = () => {
-    const newGuessArea = getGuessArea();
-    setGuessArea(newGuessArea); // Reset guess area
-    resetVirtualKeyboard(); // Reset virtual keyboard
-    setRowIndex(0);
-    setColumnIndex(0);
-    setCurrentRow(newGuessArea[0]);
-    setWordFound(false);
-    setMessage("");
-    setKeepOpen(false);
-    setEndGame(false);
-    setBackground(defaultBg);
-    setWordChosen(getRandomWord()); // Set a new random word
+    setState({ ...initialState, wordChosen: getRandomWord() });
   };
 
-  // console.log(wordChosen);
+  const setBackground = (flag) => {
+    setState({ ...state, background: flag });
+  };
+
   useEffect(() => {
-    console.log("wordChosen: ", wordChosen);
-  }, [wordChosen]);
-
-  // helper functions
-  const isInWordList = (word) => {
-    return fiveLetterWords.includes(word);
-  };
+    console.log("wordChosen: ", state.wordChosen);
+  }, [state.wordChosen]);
 
   const getCurrentWord = () => {
-    return currentRow
+    return state.currentRow
       .map(({ letter }) => letter)
       .join("")
       .toLowerCase();
   };
 
-  // *** VIRTUAL KEYBOARD HANDLERS ***
-  const handleVirtualKeyPress = (key) => {
-    if (wordFound) {
-      setMessage("You found the word!");
-      return;
-    }
-    if (endGame) {
-      return;
-    }
+  const handleKeyPress = (key) => {
+    if (state.endGame) return;
     switch (key) {
-      case "Del":
-        handleDelete();
-        break;
       case "ENTER":
-        handleEnter();
+        submitWord();
+        break;
+      case "Del":
+        deleteLastLetter();
         break;
       default:
-        handleLetterInput(key);
+        addLetter(key);
     }
   };
 
-  // HANDLE DELETE
-  const handleDelete = () => {
-    let updateRow = [...currentRow];
-    updateRow[columnIndex] = { ...updateRow[columnIndex], letter: "" };
-    setCurrentRow(updateRow);
-    let newBoard = [...guessArea];
-    newBoard[rowIndex] = updateRow;
-    setGuessArea(newBoard); // Update the guessArea state with the new guessArea
-    let currentCol = columnIndex > 0 ? columnIndex - 1 : columnIndex;
-    setColumnIndex(currentCol); // Move to the previous column
+  // ****** Delete Last Letter Function ****** //
+  const deleteLastLetter = () => {
+    setState((prev) => {
+      // Can't delete if there's nothing entered
+      if (prev.columnIndex === 0) return prev;
+
+      // Adjust for the fact columnIndex points to the next insertion spot
+      const lastIndexToDelete = prev.columnIndex - 1;
+      const updatedRow = prev.currentRow.map((tile, index) =>
+        index === lastIndexToDelete ? { ...tile, letter: "" } : tile
+      );
+
+      const updatedGuessArea = prev.guessArea.map((row, idx) =>
+        idx === prev.rowIndex ? updatedRow : row
+      );
+
+      return {
+        ...prev,
+        currentRow: updatedRow,
+        guessArea: updatedGuessArea,
+        columnIndex: lastIndexToDelete, // Adjust columnIndex after deletion
+      };
+    });
   };
 
-  // HANDLE ENTER
-  const handleEnter = () => {
-    let word = getCurrentWord();
+
+  // ****** Submit Word Function ****** //
+  const submitWord = () => {
+    const word = getCurrentWord();
+
     if (word.length < 5) {
-      setMessage("Not enough letters");
+      setState((prev) => ({ ...prev, message: "Not enough letters" }));
       return;
     }
-    if (!isInWordList(word)) {
-      setMessage("Not in word list");
-      return;
-    }
-    let parsedRow = [...currentRow];
-    parsedRow = parseWord(word, wordChosen, parsedRow);
-    setCurrentRow(parsedRow);
 
-    if (word === wordChosen) {
-      setKeepOpen(true);
-      setMessage("You found the word!");
-      setWordFound(true);
-    } else {
-      setCurrentRow((currentRow) => parseWord(word, wordChosen, currentRow));
-      let newRowIndex = rowIndex + 1;
-      setRowIndex(newRowIndex);
-      setColumnIndex(0);
-      setCurrentRow(guessArea[newRowIndex]);
-    }
-    updateVirtualKeyboard(parsedRow);
-    if (rowIndex === 5) {
-      setKeepOpen(true);
-      setMessage(wordChosen);
-      setEndGame(true);
+    if (!isInWordList(word)) {
+      setState((prev) => ({ ...prev, message: "Not in word list" }));
       return;
     }
+
+    setState((prev) => {
+      const parsedRow = parseWord(word, prev.wordChosen, [...prev.currentRow]);
+      const newRowIndex = prev.rowIndex + 1;
+
+      const updatedGuessArea = prev.guessArea.map((row, index) =>
+        index === prev.rowIndex ? parsedRow : row
+      );
+
+      let newState = {
+        ...prev,
+        guessArea: updatedGuessArea,
+      };
+
+      // Directly calculate the new virtual keyboard based on newState
+      const newVirtualKeyboard = updateVirtualKeyboard(parsedRow, newState);
+
+      if (word === prev.wordChosen) {
+        newState = {
+          ...newState,
+          keepOpen: true,
+          message: "You found the word!",
+          wordFound: true,
+          endGame: true,
+          virtualKeyboard: newVirtualKeyboard,
+        };
+      } else if (newRowIndex < updatedGuessArea.length) {
+        newState = {
+          ...newState,
+          currentRow: updatedGuessArea[newRowIndex],
+          rowIndex: newRowIndex,
+          columnIndex: 0,
+          virtualKeyboard: newVirtualKeyboard, // Apply the new virtual keyboard here
+        };
+      } else {
+        newState = {
+          ...newState,
+          keepOpen: true,
+          message: "You didn't find the word!",
+          endGame: true,
+          virtualKeyboard: newVirtualKeyboard,
+        };
+      }
+
+      return newState;
+    });
   };
 
-  const updateVirtualKeyboard = (parsedRow) => {
-    // Map over each row in the virtual keyboard
-    let newVirtualKeyboard = virtualKeyboard.map((row) =>
-      // Map over each key in the row
+  const updateVirtualKeyboard = (parsedRow, currentState) => {
+    // Directly map over currentState.virtualKeyboard to create a new virtual keyboard
+    return currentState.virtualKeyboard.map((row) =>
       row.map((key) => {
-        // Find the corresponding parsed row entry by letter
         const foundRow = parsedRow.find(
           ({ letter }) => letter.toUpperCase() === key.letter
         );
-        // If found, and if the key's bgcolor is not already set to green (or the new color is green),
-        // update the key's bgcolor. Otherwise, return the key as is.
         if (
           foundRow &&
           (key.bgcolor !== "darkseagreen" ||
@@ -153,50 +170,53 @@ function App() {
         return key;
       })
     );
-    // Update the state with the new virtual keyboard
-    setVirtualKeyboard(newVirtualKeyboard);
   };
 
-  // HANDLE LETTER INPUT
-  const handleLetterInput = (key) => {
-    if (currentRow.filter((tile) => tile.letter !== "").length >= 5) {
+  // ****** Add Letter Function ****** //
+  const addLetter = (key) => {
+    const filledLength = state.currentRow.filter(
+      (tile) => tile.letter !== ""
+    ).length;
+
+    // Check if the row is fully filled and set columnIndex to 5 for deletion logic
+    if (filledLength === 5) {
+      setState((prevState) => ({ ...prevState, columnIndex: 5 }));
       return;
     }
-    let updateRow = [...currentRow];
-    // Find the first empty tile in the current row
-    const firstEmptyTileIndex = updateRow.findIndex(
-      (tile) => tile.letter === ""
+
+    // Prevent adding more letters if filledLength exceeds 4
+    if (filledLength > 4) return;
+
+    // Update the row with the new letter
+    const updatedRow = [...state.currentRow];
+    updatedRow[filledLength] = { ...updatedRow[filledLength], letter: key };
+
+    // Update the guess area with the modified row
+    const updatedGuessArea = state.guessArea.map((row, index) =>
+      index === state.rowIndex ? updatedRow : row
     );
-    // Ensure there's an empty tile to update
-    if (firstEmptyTileIndex !== -1) {
-      updateRow[firstEmptyTileIndex] = {
-        ...updateRow[firstEmptyTileIndex],
-        letter: key,
-      };
-      setCurrentRow(updateRow);
-      let newBoard = [...guessArea];
-      newBoard[rowIndex] = updateRow;
-      setGuessArea(newBoard); // Update the guessArea state with the new guessArea
-      // Update columnIndex to point to the next empty tile, or stay if the row is full
-      setColumnIndex(
-        firstEmptyTileIndex < 4 ? firstEmptyTileIndex + 1 : firstEmptyTileIndex
-      );
-    }
+
+    // Update the state with the new row and increment columnIndex
+    setState((prevState) => ({
+      ...prevState,
+      guessArea: updatedGuessArea,
+      currentRow: updatedRow,
+      columnIndex: filledLength + 1, // Increment columnIndex for next input
+    }));
   };
 
+
   return (
-    <Box sx={background}>
+    <Box sx={state.background}>
       <Header setBackground={setBackground} startNewGame={startNewGame} />
-      <AppContext.Provider
-        value={{ guessArea, setGuessArea, handleVirtualKeyPress }}
-      >
-        <TileBoard />
-        <MessageCenter message={message} keepOpen={keepOpen} />
-        <Keyboard virtualKeyboard={virtualKeyboard} />
-      </AppContext.Provider>
+      <TileBoard guessArea={state.guessArea} />
+      <MessageCenter message={state.message} keepOpen={state.keepOpen} />
+      <Keyboard
+        virtualKeyboard={state.virtualKeyboard}
+        handleKeyPress={handleKeyPress}
+      />
     </Box>
   );
 }
 
 export default App;
-
