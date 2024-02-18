@@ -1,78 +1,93 @@
 export const cityImages = [
     {
-        src: "/worldCities/bangkok.jpeg",
+        src: "/illustrations/abudhabi.webp",
+        alt: "Abu Dhabi",
+        city: "Abu Dhabi"
+    },
+    {
+        src: "/illustrations/athens.webp",
+        alt: "Athens",
+        city: "Athens"
+    },
+    {
+        src: "/illustrations/bangkok.webp",
         alt: "Bangkok",
         city: "Bangkok"
     },
     {
-        src: "/worldCities/barcelona.jpeg",
-        alt: "Barcelona",
-        city: "Barcelona"
+        src: "/illustrations/capetown.webp",
+        alt: "Cape Town",
+        city: "Cape Town"
     },
     {
-        src: "/worldCities/kruger.jpeg",
-        alt: "Kruger",
-        city: "Kruger"
+        src: "/illustrations/hongkong.webp",
+        alt: "Hong Kong",
+        city: "Hong Kong"
     },
     {
-        src: "/worldCities/london.jpeg",
+        src: "/illustrations/london.webp",
         alt: "London",
         city: "London"
     },
     {
-        src: "/worldCities/marrakesh.jpeg",
+        src: "/illustrations/madrid.webp",
+        alt: "Madrid",
+        city: "Madrid"
+    },
+    {
+        src: "/illustrations/marrakesh.webp",
         alt: "Marrakesh",
         city: "Marrakesh"
     },
     {
-        src: "/worldCities/new_york.jpeg",
+        src: "/illustrations/milan.webp",
+        alt: "Milan",
+        city: "Milan"
+    },
+    {
+        src: "/illustration/newyork.webp",
         alt: "New York",
         city: "New York"
     },
     {
-        src: "/worldCities/paris.jpeg",
+        src: "/illustrations/paris.webp",
         alt: "Paris",
         city: "Paris"
     },
     {
-        src: "/worldCities/quebec.jpeg",
-        alt: "Quebec",
-        city: "Quebec"
+        src: "/illustrations/rio.webp",
+        alt: "Rio de Janeiro",
+        city: "Rio de Janeiro"
     },
     {
-        src: "/worldCities/rio.jpeg",
-        alt: "Rio",
-        city: "Rio"
+        src: "/illustrations/saigon.webp",
+        alt: "Saigon",
+        city: "Saigon"
     },
     {
-        src: "/worldCities/seoul.jpeg",
+        src: "/illustrations/seoul.webp",
         alt: "Seoul",
         city: "Seoul"
     },
     {
-        src: "/worldCities/singapore.jpeg",
+        src: "/illustrations/singapore.webp",
         alt: "Singapore",
         city: "Singapore"
     },
     {
-        src: "/worldCities/stockholm.jpeg",
-        alt: "Stockholm",
-        city: "Stockholm"
-    },
-    {
-        src: "/worldCities/sydney.jpeg",
+        src: "/illustrations/sydney.webp",
         alt: "Sydney",
         city: "Sydney"
     },
     {
-        src: "/worldCities/tokyo.jpeg",
+        src: "/illustrations/tokyo.webp",
         alt: "Tokyo",
         city: "Tokyo"
     },
-    {
-        src: "/worldCities/venice.jpeg",
-        alt: "Venice",
-        city: "Venice"
+    { 
+        src: "/illustrations/vancouver.webp",
+        alt: "Vancouver",
+        city: "Vancouver"
     }
 ];
 
