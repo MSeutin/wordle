@@ -45,7 +45,7 @@ export const cityImages = [
         city: "Milan"
     },
     {
-        src: "/illustration/newyork.webp",
+        src: "/illustrations/newyork.webp",
         alt: "New York",
         city: "New York"
     },
@@ -88,7 +88,11 @@ export const cityImages = [
         src: "/illustrations/vancouver.webp",
         alt: "Vancouver",
         city: "Vancouver"
-    }
+    },
+    {
+        src: "/illustrations/ulanbatur.webp",
+        alt: "Ulan Batur",
+        city: "Ulan Batur"}
 ];
 
 export function getRandomCity() {
